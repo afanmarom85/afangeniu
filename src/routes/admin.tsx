@@ -134,14 +134,14 @@ function AppsEditor() {
   const update = (i: number, patch: Partial<App>) => setItems(items.map((x, j) => (j === i ? { ...x, ...patch } : x)));
   async function save(a: App) {
     const { error } = await supabase.from("apps").upsert(a);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Tersimpan"); load();
   }
   async function remove(a: App) {
-    if (!a.id) return setItems(items.filter((x) => x !== a));
+    if (!a.id) { setItems(items.filter((x) => x !== a)); return; }
     if (!confirm(`Hapus "${a.nama}"?`)) return;
     const { error } = await supabase.from("apps").delete().eq("id", a.id);
-    error ? toast.error(error.message) : (toast.success("Dihapus"), load());
+    if (error) toast.error(error.message); else { toast.success("Dihapus"); load(); }
   }
   return (
     <div className="space-y-4">
@@ -179,14 +179,14 @@ function DownloadsEditor() {
   const update = (i: number, patch: Partial<Download>) => setItems(items.map((x, j) => (j === i ? { ...x, ...patch } : x)));
   async function save(d: Download) {
     const { error } = await supabase.from("downloads").upsert(d);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Tersimpan"); load();
   }
   async function remove(d: Download) {
-    if (!d.id) return setItems(items.filter((x) => x !== d));
+    if (!d.id) { setItems(items.filter((x) => x !== d)); return; }
     if (!confirm(`Hapus "${d.judul}"?`)) return;
     const { error } = await supabase.from("downloads").delete().eq("id", d.id);
-    error ? toast.error(error.message) : (toast.success("Dihapus"), load());
+    if (error) toast.error(error.message); else { toast.success("Dihapus"); load(); }
   }
   return (
     <div className="space-y-4">
