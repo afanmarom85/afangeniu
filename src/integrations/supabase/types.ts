@@ -14,16 +14,159 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      apps: {
+        Row: {
+          created_at: string
+          deskripsi: string
+          id: string
+          is_featured: boolean
+          kategori: string
+          nama: string
+          status: string
+          url: string
+          urutan: number
+        }
+        Insert: {
+          created_at?: string
+          deskripsi?: string
+          id?: string
+          is_featured?: boolean
+          kategori?: string
+          nama: string
+          status?: string
+          url?: string
+          urutan?: number
+        }
+        Update: {
+          created_at?: string
+          deskripsi?: string
+          id?: string
+          is_featured?: boolean
+          kategori?: string
+          nama?: string
+          status?: string
+          url?: string
+          urutan?: number
+        }
+        Relationships: []
+      }
+      downloads: {
+        Row: {
+          created_at: string
+          deskripsi: string
+          id: string
+          jenis: string
+          judul: string
+          url: string
+          urutan: number
+        }
+        Insert: {
+          created_at?: string
+          deskripsi?: string
+          id?: string
+          jenis?: string
+          judul: string
+          url?: string
+          urutan?: number
+        }
+        Update: {
+          created_at?: string
+          deskripsi?: string
+          id?: string
+          jenis?: string
+          judul?: string
+          url?: string
+          urutan?: number
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          nama: string
+          pesan: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          nama: string
+          pesan: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          nama?: string
+          pesan?: string
+        }
+        Relationships: []
+      }
+      profile: {
+        Row: {
+          email: string
+          foto_url: string
+          id: number
+          nama: string
+          peran: string
+          tentang: string
+          updated_at: string
+        }
+        Insert: {
+          email?: string
+          foto_url?: string
+          id?: number
+          nama?: string
+          peran?: string
+          tentang?: string
+          updated_at?: string
+        }
+        Update: {
+          email?: string
+          foto_url?: string
+          id?: number
+          nama?: string
+          peran?: string
+          tentang?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +293,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

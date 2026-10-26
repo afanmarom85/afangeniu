@@ -615,7 +615,7 @@
         */
 
         // 1. DATA APLIKASI
-        const appsData = [
+        let appsData = [
             {
                 id: 1,
                 nama: "Aplikasi Rapor SD",
@@ -669,7 +669,7 @@
         ];
 
         // 2. DATA PUSAT UNDUHAN
-        const downloadsData = [
+        let downloadsData = [
             {
                 id: 1,
                 judul: "Modul Ajar IPAS Kelas 4 - Kurikulum Merdeka",
@@ -903,20 +903,19 @@
         }
 
         // Contact Form Handling
-        function handleFormSubmit(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
-            const name = document.getElementById('form-name').value;
-            const email = document.getElementById('form-email').value;
-            const message = document.getElementById('form-message').value;
-
-            if (name && email && message) {
-                // Notifikasi simulasi pengiriman (tidak mengklaim terkirim ke server)
-                showToast(
-                    "Pesan Siap Dikirim", 
-                    "Simulasi validasi berhasil. Karena belum ada database backend, gunakan tombol 'Kirim via Email App'.", 
-                    false
-                );
+            const nama = document.getElementById('form-name').value.trim();
+            const email = document.getElementById('form-email').value.trim();
+            const pesan = document.getElementById('form-message').value.trim();
+            if (!nama || !email || !pesan) return;
+            try {
+                const r = await fetch(`${SB_URL}/rest/v1/messages`, { method: 'POST', headers: { ...SB_HEADERS, Prefer: 'return=minimal' }, body: JSON.stringify({ nama, email, pesan }) });
+                if (!r.ok) throw new Error(await r.text());
+                showToast("Pesan Terkirim", "Terima kasih! Pesanmu sudah diterima.", false);
                 document.getElementById('contact-form').reset();
+            } catch (err) {
+                showToast("Gagal Mengirim", "Coba lagi nanti atau gunakan tombol email.", true);
             }
         }
 
@@ -927,8 +926,37 @@
         }
 
         // App Initialization
-        window.onload = function() {
+        const SB_URL = "https://hgefrrvmufavyzflnunn.supabase.co";
+        const SB_KEY = "sb_publishable_8s5jtPXUp-XgYrjgM04OoA_Ldev5XtM";
+        const SB_HEADERS = { apikey: SB_KEY, "Content-Type": "application/json" };
+        const DEFAULT_ICON = appsData[0].iconSvg;
+        function esc(v) { return String(v ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        async function sbGet(path) { const r = await fetch(`${SB_URL}/rest/v1/${path}`, { headers: SB_HEADERS }); if (!r.ok) throw new Error(await r.text()); return r.json(); }
+        async function loadFromDatabase() {
+            try {
+                const [apps, downloads, profiles] = await Promise.all([
+                    sbGet("apps?select=*&order=urutan.asc,created_at.asc"),
+                    sbGet("downloads?select=*&order=urutan.asc,created_at.asc"),
+                    sbGet("profile?select=*&id=eq.1"),
+                ]);
+                appsData = apps.map(a => ({ id: a.id, nama: esc(a.nama), kategori: esc(a.kategori), deskripsi: esc(a.deskripsi), status: esc(a.status), url: esc(a.url).replace(/&#39;/g, ''), isFeatured: a.is_featured, iconSvg: DEFAULT_ICON }));
+                downloadsData = downloads.map(d => ({ id: d.id, judul: esc(d.judul), jenis: esc(d.jenis), deskripsi: esc(d.deskripsi), url: esc(d.url).replace(/&#39;/g, '') }));
+                const p = profiles[0];
+                if (p) {
+                    document.querySelectorAll('[id="profile-name"]').forEach(el => { if (p.nama) el.textContent = p.nama; });
+                    document.querySelectorAll('[id="profile-role"]').forEach(el => { if (p.peran) el.textContent = p.peran; });
+                    document.querySelectorAll('[id="contact-email-text"]').forEach(el => { if (p.email) el.textContent = p.email; });
+                    document.querySelectorAll('[id="page-profil"]').forEach(sec => {
+                        if (p.foto_url) sec.querySelectorAll('img').forEach(img => img.src = p.foto_url);
+                        if (p.tentang) { const h = [...sec.querySelectorAll('h3')].find(x => x.textContent.includes('Tentang')); const para = h && h.parentElement.querySelector('p'); if (para) para.textContent = p.tentang; }
+                    });
+                }
+            } catch (err) { console.error('Gagal memuat data', err); }
+        }
+
+        window.onload = async function() {
             switchTab('beranda');
+            await loadFromDatabase();
             renderFeaturedApps();
             renderCategories();
             renderApps();
