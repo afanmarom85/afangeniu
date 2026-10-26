@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- EDITABLE: Judul & Deskripsi Website -->
+    <title>Beranda Maz Afan - Tempat Berbagi Karya & Hal Bermanfaat</title>
+    <meta name="description" content="Beranda pribadi Maz Afan. Tempat berbagi aplikasi sederhana, media pembelajaran, dan perangkat bermanfaat.">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        teal: {
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom Notification Toast animation */
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+        .toast-animate {
+            animation: fadeInOut 3s forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- ========================================== -->
+    <!-- NAVIGATION BAR                             -->
+    <!-- ========================================== -->
+    <header class="sticky top-0 z-50 bg-navy-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="switchTab('beranda')">
+                    <div class="w-9 h-9 bg-teal-500 rounded-lg flex items-center justify-center font-bold text-navy-900 text-lg shadow-lg">
+                        MA
+                    </div>
+                    <!-- EDITABLE: Nama Website/Brand -->
+                    <span class="font-bold text-xl tracking-tight text-white">Beranda <span class="text-teal-400">Maz Afan</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('beranda')" id="nav-beranda" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Beranda</button>
+                    <button onclick="switchTab('profil')" id="nav-profil" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Profil Saya</button>
+                    <button onclick="switchTab('koleksi')" id="nav-koleksi" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Koleksi Aplikasi</button>
+                    <button onclick="switchTab('unduhan')" id="nav-unduhan" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Pusat Unduhan</button>
+                    <button onclick="switchTab('kontak')" id="nav-kontak" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Kontak</button>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" type="button" class="text-slate-300 hover:text-white focus:outline-none p-2 rounded-md" aria-label="Menu">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path id="hamburger-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-navy-950 border-t border-slate-800 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('beranda')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Beranda</button>
+            <button onclick="switchTab('profil')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Profil Saya</button>
+            <button onclick="switchTab('koleksi')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Koleksi Aplikasi</button>
+            <button onclick="switchTab('unduhan')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Pusat Unduhan</button>
+            <button onclick="switchTab('kontak')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Kontak</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+        
+        <!-- ========================================== -->
+        <!-- SECTION 1: BERANDA                         -->
+        <!-- ========================================== -->
+        <section id="page-beranda" class="page-section">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-b from-navy-900 via-navy-800 to-slate-900 text-white py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto text-center">
+                    <span class="inline-block px-4 py-1.5 bg-teal-500/20 text-teal-300 rounded-full text-sm font-medium mb-4 border border-teal-500/30">
+                        👋 Selamat datang teman-teman!
+                    </span>
+                    <!-- EDITABLE: Tagline Utama -->
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+                        Tempat Berbagi Karya dan Hal Bermanfaat
+                    </h1>
+                    <!-- EDITABLE: Deskripsi Singkat Hero -->
+                    <p class="text-base sm:text-lg text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                        Halo! Saya Maz Afan. Di beranda pribadi ini, saya membagikan beberapa proyek aplikasi kecil, alat edukasi, dan dokumen praktis buatan sendiri yang semoga bisa membantu pekerjaan sehari-hari.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="switchTab('koleksi')" class="w-full sm:w-auto px-6 py-3 bg-teal-500 hover:bg-teal-600 text-navy-900 font-bold rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2">
+                            <span>Lihat Koleksi Aplikasi</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                        <button onclick="switchTab('profil')" class="w-full sm:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-700 transition duration-200">
+                            Kenalan Lebih Dekat
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Summary Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-navy-900">Apa Saja yang Ada di Sini?</h2>
+                    <p class="text-slate-600 mt-2">Dibuat sederhana dengan semangat saling berbagi dan mempermudah sesama.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 mb-2">Aplikasi Praktis</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Berbagai tool berbasis web yang langsung bisa dipakai via browser tanpa perlu instalasi rumit.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 mb-2">Media & Perangkat Ajar</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Media interaktif dan berkas pendukung pembelajaran yang dirancang langsung dari pengalaman mengajar.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 mb-2">Terbuka & Gratis</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Semua yang ada di sini bebas digunakan dan dibagikan kembali untuk rekan-rekan yang membutuhkan.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Apps Preview Section -->
+            <div class="bg-slate-100 py-16 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-navy-900">Karya Pilihan</h2>
+                            <p class="text-slate-600 mt-1">Beberapa karya dan aplikasi yang paling sering digunakan</p>
+                        </div>
+                        <button onclick="switchTab('koleksi')" class="text-teal-600 font-semibold hover:text-teal-700 flex items-center gap-1">
+                            Lihat Semua Karya &rarr;
+                        </button>
+                    </div>
+                    <!-- Dynamic Featured Container -->
+                    <div id="featured-apps-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Filled dynamically by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: PROFIL SAYA                     -->
+        <!-- ========================================== -->
+        <section id="page-profil" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-navy-900 h-32 md:h-48 w-full relative">
+                    <div class="absolute -bottom-12 left-6 md:left-10">
+                        <!-- EDITABLE: Placeholder Foto Profil (Bisa ganti src gambar) -->
+                        <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-white p-1 shadow-lg">
+                            <img src="https://placehold.co/300x300/1e293b/2dd4bf?text=Maz+Afan" alt="Foto Maz Afan" class="w-full h-full object-cover rounded-xl" onerror="this.src='https://placehold.co/300x300/1e293b/ffffff?text=Maz+Afan'">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-16 pb-8 px-6 md:px-10">
+                    <!-- EDITABLE: Nama & Gelar -->
+                    <h1 class="text-2xl md:text-3xl font-bold text-navy-900" id="profile-name">Maz Afan</h1>
+                    <!-- EDITABLE: Profesi / Peran -->
+                    <p class="text-teal-600 font-medium mt-1" id="profile-role">Guru & Pengembang Aplikasi Sederhana</p>
+                    
+                    <div class="mt-6 border-t border-slate-100 pt-6 space-y-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-navy-900 mb-2">Tentang Saya</h3>
+                            <!-- EDITABLE: Deskripsi Diri -->
+                            <p class="text-slate-600 leading-relaxed">
+                                Halo semuanya! Saya Maz Afan, seorang pendidik yang hobi mengulik dunia pemrograman web sederhana. 
+                                Di sela-sela aktivitas mengajar, saya senang bereksperimen membuat aplikasi mandiri untuk membantu urusan administrasi, 
+                                media ajar interaktif, atau sekadar membuat alat bantu kecil yang memudahkan aktivitas sehari-hari.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-navy-900 mb-3">Fokus & Minat</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Pengembangan Media Ajar</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Web Sederhana (HTML/JS)</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Administrasi Pembelajaran</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Edukasi Berbasis AI</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-navy-900 mb-2">Semangat Berbagi</h3>
+                            <!-- EDITABLE: Tujuan -->
+                            <p class="text-slate-600 leading-relaxed">
+                                Lewat situs <strong>Beranda Maz Afan</strong> ini, saya berharap apa yang saya buat tidak berhenti di laptop saya saja, tetapi bisa langsung bermanfaat untuk kawan-kawan guru maupun masyarakat luas. Santai saja, semua alat di sini bebas dipakai!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: KOLEKSI APLIKASI                -->
+        <!-- ========================================== -->
+        <section id="page-koleksi" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header Page -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-navy-900">Koleksi Aplikasi & Karya</h1>
+                    <p class="text-slate-600 mt-2">Daftar tool, aplikasi web mandiri, dan proyek interaktif yang sudah saya buat.</p>
+                </div>
+                    <!-- EDITABLE: Nama Brand/Website -->
+                    <span class="font-bold text-xl tracking-tight text-white">Ruang <span class="text-teal-400">Digital</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('beranda')" id="nav-beranda" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Beranda</button>
+                    <button onclick="switchTab('profil')" id="nav-profil" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Profil Saya</button>
+                    <button onclick="switchTab('koleksi')" id="nav-koleksi" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Koleksi Aplikasi</button>
+                    <button onclick="switchTab('unduhan')" id="nav-unduhan" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Pusat Unduhan</button>
+                    <button onclick="switchTab('kontak')" id="nav-kontak" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition duration-200">Kontak</button>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" type="button" class="text-slate-300 hover:text-white focus:outline-none p-2 rounded-md" aria-label="Menu">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path id="hamburger-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-navy-950 border-t border-slate-800 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('beranda')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Beranda</button>
+            <button onclick="switchTab('profil')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Profil Saya</button>
+            <button onclick="switchTab('koleksi')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Koleksi Aplikasi</button>
+            <button onclick="switchTab('unduhan')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Pusat Unduhan</button>
+            <button onclick="switchTab('kontak')" class="mobile-nav-btn block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-slate-800">Kontak</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+        
+        <!-- ========================================== -->
+        <!-- SECTION 1: BERANDA                         -->
+        <!-- ========================================== -->
+        <section id="page-beranda" class="page-section">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-b from-navy-900 via-navy-800 to-slate-900 text-white py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto text-center">
+                    <span class="inline-block px-3 py-1 bg-teal-500/20 text-teal-400 rounded-full text-sm font-semibold mb-4 border border-teal-500/30">
+                        Inovasi Edukasi & Pembelajaran
+                    </span>
+                    <!-- EDITABLE: Tagline Utama -->
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">
+                        Solusi Digital untuk Pekerjaan Lebih Mudah & Efisien
+                    </h1>
+                    <!-- EDITABLE: Deskripsi Singkat Hero -->
+                    <p class="text-base sm:text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                        Kumpulan aplikasi web mandiri, perangkat pembelajaran, serta dokumen praktis buatan pendidik untuk mendukung efektivitas mengajar dan administrasi.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="switchTab('koleksi')" class="w-full sm:w-auto px-6 py-3 bg-teal-500 hover:bg-teal-600 text-navy-900 font-bold rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2">
+                            <span>Jelajahi Aplikasi</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                        <button onclick="switchTab('profil')" class="w-full sm:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-700 transition duration-200">
+                            Tentang Saya
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Summary Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-navy-900">Mengapa Ruang Digital?</h2>
+                    <p class="text-slate-600 mt-2">Didesain khusus untuk kebutuhan praktis di lapangan</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 mb-2">Ringan & Cepat</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Aplikasi berbasis web yang dapat diakses langsung dari browser perangkat tanpa perlu instalasi rumit.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 mb-2">Berorientasi Pendidikan</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Dirancang berdasarkan pengalaman nyata guru di kelas untuk mengatasi kendala administrasi dan media ajar.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 mb-2">Gratis & Terbuka</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Semua berkas panduan dan aplikasi siap digunakan untuk membantu rekan sejawat sesama pendidik.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Apps Preview Section -->
+            <div class="bg-slate-100 py-16 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-navy-900">Aplikasi Unggulan</h2>
+                            <p class="text-slate-600 mt-1">Beberapa aplikasi yang paling sering digunakan</p>
+                        </div>
+                        <button onclick="switchTab('koleksi')" class="text-teal-600 font-semibold hover:text-teal-700 flex items-center gap-1">
+                            Lihat Semua Aplikasi &rarr;
+                        </button>
+                    </div>
+                    <!-- Dynamic Featured Container -->
+                    <div id="featured-apps-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Filled dynamically by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: PROFIL SAYA                     -->
+        <!-- ========================================== -->
+        <section id="page-profil" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-navy-900 h-32 md:h-48 w-full relative">
+                    <div class="absolute -bottom-12 left-6 md:left-10">
+                        <!-- EDITABLE: Placeholder Foto Profil (Bisa ganti src gambar) -->
+                        <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-white p-1 shadow-lg">
+                            <img src="https://placehold.co/300x300/1e293b/2dd4bf?text=Foto+Guru" alt="Foto Profil Guru" class="w-full h-full object-cover rounded-xl" onerror="this.src='https://placehold.co/300x300/1e293b/ffffff?text=Profil'">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-16 pb-8 px-6 md:px-10">
+                    <!-- EDITABLE: Nama & Gelar Guru -->
+                    <h1 class="text-2xl md:text-3xl font-bold text-navy-900" id="profile-name">Nama Pengembang / Guru, S.Pd.</h1>
+                    <!-- EDITABLE: Profesi & Institusi -->
+                    <p class="text-teal-600 font-medium mt-1" id="profile-role">Guru Sekolah Dasar & Pengembang Media Pembelajaran</p>
+                    
+                    <div class="mt-6 border-t border-slate-100 pt-6 space-y-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-navy-900 mb-2">Tentang Saya</h3>
+                            <!-- EDITABLE: Deskripsi Diri -->
+                            <p class="text-slate-600 leading-relaxed">
+                                Halo! Saya adalah seorang pendidik yang memiliki ketertarikan tinggi pada integrasi teknologi dalam dunia pendidikan. 
+                                Selain mengajar sehari-hari, saya aktif mengembangkan berbagai aplikasi web sederhana dan media pembelajaran interaktif 
+                                untuk membantu efisiensi administrasi guru serta menciptakan pengalaman belajar yang lebih menyenangkan bagi siswa.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-navy-900 mb-3">Bidang Keahlian & Keterampilan</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Manajemen Kelas</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Pengembangan Web (HTML/CSS/JS)</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Media Interaktif</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Pemanfaatan AI Edukasi</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg border border-slate-200">Desain Bahan Ajar</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-navy-900 mb-2">Tujuan Pengembangan Aplikasi</h3>
+                            <!-- EDITABLE: Tujuan -->
+                            <p class="text-slate-600 leading-relaxed">
+                                Melalui platform <strong>Ruang Digital</strong> ini, saya berharap dapat membagikan hasil karya mandiri secara terbuka agar dapat digunakan secara bebas oleh rekan-rekan guru di seluruh Indonesia. Semua aplikasi dirancang agar langsung bisa digunakan tanpa proses instalasi yang rumit.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: KOLEKSI APLIKASI                -->
+        <!-- ========================================== -->
+        <section id="page-koleksi" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header Page -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-navy-900">Koleksi Aplikasi Digital</h1>
+                    <p class="text-slate-600 mt-2">Daftar perangkat lunak dan aplikasi interaktif berbasis web yang telah dikembangkan.</p>
+                </div>
+
+                <!-- Filter & Search Controls -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200/80 mb-8 flex flex-col sm:flex-row gap-4 justify-between items-center">
+                    <!-- Search Input -->
+                    <div class="relative w-full sm:w-80">
+                        <input type="text" id="search-app" oninput="renderApps()" placeholder="Cari nama atau deskripsi..." class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                        <svg class="w-5 h-5 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">Kategori:</span>
+                        <div id="category-buttons" class="flex gap-2">
+                            <!-- Category Buttons generated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apps Grid -->
+                <div id="apps-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be populated dynamically by JavaScript -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="apps-empty" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-200 mt-4">
+                    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <p class="text-slate-600 font-medium">Aplikasi tidak ditemukan</p>
+                    <p class="text-slate-400 text-sm mt-1">Coba gunakan kata kunci lain atau ubah filter kategori.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: PUSAT UNDUHAN                  -->
+        <!-- ========================================== -->
+        <section id="page-unduhan" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-navy-900">Pusat Unduhan Document</h1>
+                    <p class="text-slate-600 mt-2">Unduh berkas RPP, modul ajar, panduan aplikasi, dan perangkat pembelajaran lainnya.</p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                    <div class="divide-y divide-slate-100" id="download-list-container">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: KONTAK                          -->
+        <!-- ========================================== -->
+        <section id="page-kontak" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-10">
+                    <h1 class="text-3xl font-bold text-navy-900">Yuk, Menyapa!</h1>
+                    <p class="text-slate-600 mt-2">Punya masukan, ide berdiskusi, atau mau berkenalan? Silakan kontak saya kapan saja.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Info Left Column -->
+                    <div class="md:col-span-1 bg-navy-900 text-white p-6 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4">Kotak Surat</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                                Kamu bisa kirim email langsung atau isi formulir di samping.
+                            </p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-teal-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    <div>
+                                        <div class="text-xs text-slate-400 uppercase">Email</div>
+                                        <!-- EDITABLE: Email kontak -->
+                                        <div id="contact-email-text" class="text-sm font-medium text-slate-100">maz.afan@emailku.id</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-teal-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    <div>
+                                        <div class="text-xs text-slate-400 uppercase">Lokasi</div>
+                                        <!-- EDITABLE: Alamat singkat -->
+                                        <div class="text-sm font-medium text-slate-100">Indonesia</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-slate-800">
+                            <button onclick="sendMailto()" class="w-full py-2.5 px-4 bg-teal-500 hover:bg-teal-600 text-navy-900 font-semibold text-sm rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                <span>Kirim via Email App</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form Right Column -->
+                    <div class="md:col-span-2 bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80">
+                        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                            <div>
+                                <label for="form-name" class="block text-sm font-medium text-slate-700 mb-1">Nama / Panggilan *</label>
+                                <input type="text" id="form-name" required placeholder="Siapa nama kamu?" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label for="form-email" class="block text-sm font-medium text-slate-700 mb-1">Alamat Email *</label>
+                                <input type="email" id="form-email" required placeholder="contoh@email.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label for="form-message" class="block text-sm font-medium text-slate-700 mb-1">Pesan / Masukan *</label>
+                                <textarea id="form-message" rows="4" required placeholder="Tuliskan pesan santaimu di sini..." class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 px-6 bg-navy-900 hover:bg-navy-800 text-white font-semibold rounded-xl transition duration-200 shadow-sm">
+                                Kirim Pesan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- FOOTER                                     -->
+    <!-- ========================================== -->
+    <footer class="bg-navy-950 text-slate-400 py-10 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <!-- Brand Footer -->
+                <div class="text-center md:text-left">
+                    <span class="font-bold text-lg text-white">Beranda <span class="text-teal-400">Maz Afan</span></span>
+                    <p class="text-xs text-slate-400 mt-1">Tempat Berbagi Karya dan Hal Bermanfaat</p>
+                </div>
+
+                <!-- Footer Nav -->
+                <div class="flex flex-wrap justify-center gap-6 text-sm">
+                    <button onclick="switchTab('beranda')" class="hover:text-white transition">Beranda</button>
+                    <button onclick="switchTab('profil')" class="hover:text-white transition">Profil</button>
+                    <button onclick="switchTab('koleksi')" class="hover:text-white transition">Aplikasi</button>
+                    <button onclick="switchTab('unduhan')" class="hover:text-white transition">Unduhan</button>
+                    <button onclick="switchTab('kontak')" class="hover:text-white transition">Kontak</button>
+                </div>
+
+                <!-- Copyright -->
+                <div class="text-xs text-slate-400 text-center md:text-right">
+                    &copy; <span id="current-year"></span> Beranda Maz Afan. Hak Cipta Dilindungi.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- NOTIFICATION TOAST (REPLACEMENT FOR ALERT) -->
+    <!-- ========================================== -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-navy-900 text-white p-4 rounded-xl shadow-2xl border border-teal-500/50 flex items-start gap-3">
+        <div id="toast-icon" class="text-teal-400 mt-0.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div>
+            <h4 id="toast-title" class="font-bold text-sm">Pemberitahuan</h4>
+            <p id="toast-message" class="text-xs text-slate-300 mt-0.5">Pesan notifikasi...</p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC & DATA                    -->
+    <!-- ========================================== -->
+    <script>
+        /* 
+        ========================================================================
+        DATA APLIKASI & UNDUHAN (MUDAH DIEDIT)
+        ========================================================================
+        Silakan ubah, tambah, atau hapus data di bawah ini sesuai kebutuhan Anda.
+        - URL yang diisi string kosong "" akan memunculkan pemberitahuan "Tautan aplikasi belum tersedia".
+        - Untuk tautan aktif, masukkan URL lengkap seperti: "https://domain-anda.com/app"
+        */
+
+        // 1. DATA APLIKASI
+        const appsData = [
+            {
+                id: 1,
+                nama: "Aplikasi Rapor SD",
+                kategori: "Administrasi",
+                deskripsi: "Alat bantu olah nilai dan cetak deskripsi capaian pembelajaran Kurikulum Merdeka secara otomatis.",
+                status: "Siap Digunakan",
+                url: "", // EDITABLE: Masukkan URL aplikasi di sini
+                isFeatured: true,
+                iconSvg: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`
+            },
+            {
+                id: 2,
+                nama: "Generator Soal AI Helper",
+                kategori: "Alat Pendidik",
+                deskripsi: "Template perintah dan pembuat kuis interaktif berbasis kisi-kisi pembelajaran.",
+                status: "Siap Digunakan",
+                url: "", // EDITABLE: Masukkan URL aplikasi di sini
+                isFeatured: true,
+                iconSvg: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-disabled2a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>`
+            },
+            {
+                id: 3,
+                nama: "Media Pembelajaran Interaktif",
+                kategori: "Media Ajar",
+                deskripsi: "Kumpulan gim kuis interaktif sains dan matematika dasar untuk siswa sekolah dasar.",
+                status: "Siap Digunakan",
+                url: "", // EDITABLE: Masukkan URL aplikasi di sini
+                isFeatured: true,
+                iconSvg: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+            },
+            {
+                id: 4,
+                nama: "Pengacak Kelompok Belajar",
+                kategori: "Alat Pendidik",
+                deskripsi: "Aplikasi sederhana untuk membagi kelompok belajar siswa secara acak dan adil.",
+                status: "Pengembangan",
+                url: "", // EDITABLE: Masukkan URL aplikasi di sini
+                isFeatured: false,
+                iconSvg: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`
+            },
+            {
+                id: 5,
+                nama: "Timer & Bel Kelas Interaktif",
+                kategori: "Media Ajar",
+                deskripsi: "Hitung mundur waktu diskusi kelompok dilengkapi efek suara penanda waktu habis.",
+                status: "Siap Digunakan",
+                url: "", // EDITABLE: Masukkan URL aplikasi di sini
+                isFeatured: false,
+                iconSvg: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+            }
+        ];
+
+        // 2. DATA PUSAT UNDUHAN
+        const downloadsData = [
+            {
+                id: 1,
+                judul: "Modul Ajar IPAS Kelas 4 - Kurikulum Merdeka",
+                jenis: "PDF",
+                deskripsi: "Perangkat pembelajaran lengkap Bab 1 sampai Bab 4 dilengkapi LKPD interaktif.",
+                url: "" // EDITABLE: Masukkan URL berkas (Google Drive / Direct link)
+            },
+            {
+                id: 2,
+                judul: "Template Format Nilai Harian (Excel)",
+                jenis: "Word / Excel",
+                deskripsi: "Format rekapitulasi nilai yang otomatis menghitung rerata dan predikat capaian.",
+                url: "" // EDITABLE: Masukkan URL berkas
+            },
+            {
+                id: 3,
+                judul: "Panduan Penggunaan Aplikasi Rapor SD",
+                jenis: "PDF",
+                deskripsi: "Buku petunjuk pengisian dan penyelesaian masalah teknis penggunaan aplikasi.",
+                url: "" // EDITABLE: Masukkan URL berkas
+            }
+        ];
+
+        // Global State
+        let selectedCategory = "Semua";
+
+        // Initialize Year in Footer
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+
+        // Single Page Navigation Function
+        function switchTab(tabId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.add('hidden'));
+
+            // Show targeted page
+            const targetPage = document.getElementById(`page-${tabId}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            // Update Navigation Button Active Styles
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('bg-teal-500', 'text-navy-900', 'font-bold');
+                btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+            });
+
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+                activeNav.classList.add('bg-teal-500', 'text-navy-900', 'font-bold');
+            }
+
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (!mobileMenu.classList.contains('hidden')) {
+                toggleMobileMenu();
+            }
+
+            // Scroll top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Toast Notification System
+        function showToast(title, message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastTitle = document.getElementById('toast-title');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+
+            if (isError) {
+                toastIcon.innerHTML = `<svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
+            } else {
+                toastIcon.innerHTML = `<svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+            }
+
+            toast.classList.remove('hidden');
+            toast.classList.add('toast-animate');
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('toast-animate');
+            }, 3000);
+        }
+
+        // Open External Link Safety Guard
+        function openAppUrl(url) {
+            if (!url || url.trim() === "") {
+                showToast("Tautan Belum Tersedia", "Tautan aplikasi belum dimasukkan oleh pengembang.", true);
+            } else {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        }
+
+        // Open Download Link Safety Guard
+        function triggerDownload(url, title) {
+            if (!url || url.trim() === "") {
+                showToast("Berkas Belum Tersedia", `Berkas "${title}" statusnya masih Segera Tersedia.`, true);
+            } else {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        }
+
+        // Render Featured Apps on Home Page
+        function renderFeaturedApps() {
+            const container = document.getElementById('featured-apps-container');
+            const featured = appsData.filter(app => app.isFeatured);
+            
+            container.innerHTML = featured.map(app => `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-teal-50 text-teal-600 rounded-xl">
+                                ${app.iconSvg}
+                            </div>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">${app.kategori}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 mb-2">${app.nama}</h3>
+                        <p class="text-slate-600 text-sm mb-4 leading-relaxed">${app.deskripsi}</p>
+                    </div>
+                    <button onclick="openAppUrl('${app.url}')" class="w-full py-2.5 px-4 bg-navy-900 hover:bg-navy-800 text-white font-medium text-sm rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                        <span>Buka Aplikasi</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Render Filter Category Buttons
+        function renderCategories() {
+            const categories = ["Semua", ...new Set(appsData.map(app => app.kategori))];
+            const container = document.getElementById('category-buttons');
+            
+            container.innerHTML = categories.map(cat => `
+                <button onclick="setCategory('${cat}')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${selectedCategory === cat ? 'bg-navy-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function setCategory(cat) {
+            selectedCategory = cat;
+            renderCategories();
+            renderApps();
+        }
+
+        // Render Apps Grid with Search & Filter
+        function renderApps() {
+            const searchValue = document.getElementById('search-app').value.toLowerCase();
+            const container = document.getElementById('apps-container');
+            const emptyState = document.getElementById('apps-empty');
+
+            const filtered = appsData.filter(app => {
+                const matchesCategory = selectedCategory === "Semua" || app.kategori === selectedCategory;
+                const matchesSearch = app.nama.toLowerCase().includes(searchValue) || app.deskripsi.toLowerCase().includes(searchValue);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                container.innerHTML = filtered.map(app => `
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="p-3 bg-teal-50 text-teal-600 rounded-xl">
+                                    ${app.iconSvg}
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">${app.kategori}</span>
+                                </div>
+                            </div>
+                            <h3 class="text-lg font-bold text-navy-900 mb-1">${app.nama}</h3>
+                            <span class="inline-block text-[11px] font-medium px-2 py-0.5 mb-3 rounded ${app.status === 'Siap Digunakan' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200'}">
+                                Status: ${app.status}
+                            </span>
+                            <p class="text-slate-600 text-sm mb-6 leading-relaxed">${app.deskripsi}</p>
+                        </div>
+                        <button onclick="openAppUrl('${app.url}')" class="w-full py-2.5 px-4 bg-navy-900 hover:bg-navy-800 text-white font-medium text-sm rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                            <span>Buka Aplikasi</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Render Download Center List
+        function renderDownloads() {
+            const container = document.getElementById('download-list-container');
+            container.innerHTML = downloadsData.map(item => {
+                const isAvailable = item.url && item.url.trim() !== "";
+                return `
+                <div class="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-slate-50/80 transition">
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-slate-100 text-navy-900 rounded-xl shrink-0 mt-1 sm:mt-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h3 class="text-base font-bold text-navy-900">${item.judul}</h3>
+                                <span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-slate-200 text-slate-700 rounded">${item.jenis}</span>
+                            </div>
+                            <p class="text-slate-600 text-sm">${item.deskripsi}</p>
+                        </div>
+                    </div>
+                    <div class="w-full sm:w-auto flex items-center gap-3">
+                        <span class="text-xs font-semibold ${isAvailable ? 'text-emerald-600' : 'text-slate-400'} whitespace-nowrap">
+                            ${isAvailable ? 'Tersedia' : 'Segera Tersedia'}
+                        </span>
+                        <button onclick="triggerDownload('${item.url}', '${item.judul}')" class="w-full sm:w-auto px-4 py-2 ${isAvailable ? 'bg-teal-500 hover:bg-teal-600 text-navy-900' : 'bg-slate-200 text-slate-500 cursor-not-allowed'} font-medium text-sm rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            <span>Unduh</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        // Contact Form Handling
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('form-name').value;
+            const email = document.getElementById('form-email').value;
+            const message = document.getElementById('form-message').value;
+
+            if (name && email && message) {
+                // Notifikasi simulasi pengiriman (tidak mengklaim terkirim ke server)
+                showToast(
+                    "Pesan Siap Dikirim", 
+                    "Simulasi validasi berhasil. Karena belum ada database backend, gunakan tombol 'Kirim via Email App'.", 
+                    false
+                );
+                document.getElementById('contact-form').reset();
+            }
+        }
+
+        // Send via mailto
+        function sendMailto() {
+            const email = document.getElementById('contact-email-text').textContent.trim();
+            window.location.href = `mailto:${email}?subject=Halo%20Maz%20Afan`;
+        }
+
+        // App Initialization
+        window.onload = function() {
+            switchTab('beranda');
+            renderFeaturedApps();
+            renderCategories();
+            renderApps();
+            renderDownloads();
+        };
+    </script>
+</body>
+</html>
