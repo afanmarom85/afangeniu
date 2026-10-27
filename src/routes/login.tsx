@@ -33,7 +33,8 @@ function LoginPage() {
     setLoading(true);
     try {
       if (mode === "masuk") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const loginEmail = email.includes("@") ? email : `${email.trim()}@afangeniu.app`;
+        const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password });
         if (error) throw error;
         navigate({ to: "/admin" });
       } else {
@@ -67,8 +68,8 @@ function LoginPage() {
           </p>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Label htmlFor="email">{mode === "masuk" ? "Username atau email" : "Email"}</Label>
+          <Input id="email" type={mode === "masuk" ? "text" : "email"} required value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Kata sandi</Label>
