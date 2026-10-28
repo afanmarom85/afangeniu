@@ -61,7 +61,8 @@
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="switchTab('beranda')">
-                    <div class="w-9 h-9 bg-teal-500 rounded-lg flex items-center justify-center font-bold text-navy-900 text-lg shadow-lg">
+                    <img id="brand-logo" alt="Logo" class="hidden h-9 w-9 rounded-lg object-cover shadow-lg" />
+                    <div id="brand-logo-fallback" class="w-9 h-9 bg-teal-500 rounded-lg flex items-center justify-center font-bold text-navy-900 text-lg shadow-lg">
                         MA
                     </div>
                     <!-- EDITABLE: Nama Website/Brand -->
@@ -760,6 +761,10 @@
                 if (p) {
                     document.querySelectorAll('[id="profile-name"]').forEach(el => { if (p.nama) el.textContent = p.nama; });
                     document.querySelectorAll('[id="profile-role"]').forEach(el => { if (p.peran) el.textContent = p.peran; });
+                    if (p.logo_url) {
+                        document.querySelectorAll('[id="brand-logo"]').forEach(el => { el.src = p.logo_url; el.classList.remove('hidden'); });
+                        document.querySelectorAll('[id="brand-logo-fallback"]').forEach(el => el.classList.add('hidden'));
+                    }
                     document.querySelectorAll('[id="contact-email-text"]').forEach(el => { if (p.email) el.textContent = p.email; });
                     document.querySelectorAll('[id="page-profil"]').forEach(sec => {
                         if (p.foto_url) sec.querySelectorAll('img').forEach(img => img.src = p.foto_url);
