@@ -109,6 +109,7 @@ export type Database = {
           email: string
           foto_url: string
           id: number
+          logo_url: string
           nama: string
           peran: string
           tentang: string
@@ -118,6 +119,7 @@ export type Database = {
           email?: string
           foto_url?: string
           id?: number
+          logo_url?: string
           nama?: string
           peran?: string
           tentang?: string
@@ -127,6 +129,7 @@ export type Database = {
           email?: string
           foto_url?: string
           id?: number
+          logo_url?: string
           nama?: string
           peran?: string
           tentang?: string
