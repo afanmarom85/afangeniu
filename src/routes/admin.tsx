@@ -121,6 +121,15 @@ function ProfileEditor() {
     reader.onerror = () => { toast.error("Gagal membaca berkas"); setLogoBusy(false); };
     reader.readAsDataURL(file);
   }
+  function onPhotoFile(file: File) {
+    if (!file.type.startsWith("image/")) { toast.error("Berkas harus berupa gambar (PNG/JPG)"); return; }
+    if (file.size > 500 * 1024) { toast.error("Ukuran foto maksimal 500 KB"); return; }
+    setPhotoBusy(true);
+    const reader = new FileReader();
+    reader.onload = () => { setP({ ...p!, foto_url: String(reader.result) }); setPhotoBusy(false); };
+    reader.onerror = () => { toast.error("Gagal membaca berkas"); setPhotoBusy(false); };
+    reader.readAsDataURL(file);
+  }
   async function save() {
     const { error } = await supabase.from("profile").upsert({ id: 1, ...p!, updated_at: new Date().toISOString() });
     error ? toast.error(error.message) : toast.success("Profil disimpan");
