@@ -31,7 +31,7 @@ export const Route = createFileRoute("/admin")({
 
 type App = { id?: string; nama: string; kategori: string; deskripsi: string; status: string; url: string; is_featured: boolean; urutan: number };
 type Download = { id?: string; judul: string; jenis: string; deskripsi: string; url: string; urutan: number };
-type Profile = { nama: string; peran: string; tentang: string; foto_url: string; email: string };
+type Profile = { nama: string; peran: string; tentang: string; foto_url: string; logo_url: string; email: string };
 type Message = { id: string; nama: string; email: string; pesan: string; created_at: string };
 
 function AdminPage() {
