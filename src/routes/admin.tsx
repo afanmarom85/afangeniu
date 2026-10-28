@@ -106,6 +106,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function ProfileEditor() {
   const [p, setP] = useState<Profile | null>(null);
   const [logoBusy, setLogoBusy] = useState(false);
+  const [photoBusy, setPhotoBusy] = useState(false);
   useEffect(() => {
     supabase.from("profile").select("*").eq("id", 1).maybeSingle().then(({ data }) =>
       setP(data ?? { nama: "", peran: "", tentang: "", foto_url: "", logo_url: "", email: "" }),
@@ -119,6 +120,15 @@ function ProfileEditor() {
     const reader = new FileReader();
     reader.onload = () => { setP({ ...p!, logo_url: String(reader.result) }); setLogoBusy(false); };
     reader.onerror = () => { toast.error("Gagal membaca berkas"); setLogoBusy(false); };
+    reader.readAsDataURL(file);
+  }
+  function onPhotoFile(file: File) {
+    if (!file.type.startsWith("image/")) { toast.error("Berkas harus berupa gambar (PNG/JPG)"); return; }
+    if (file.size > 500 * 1024) { toast.error("Ukuran foto maksimal 500 KB"); return; }
+    setPhotoBusy(true);
+    const reader = new FileReader();
+    reader.onload = () => { setP({ ...p!, foto_url: String(reader.result) }); setPhotoBusy(false); };
+    reader.onerror = () => { toast.error("Gagal membaca berkas"); setPhotoBusy(false); };
     reader.readAsDataURL(file);
   }
   async function save() {
@@ -162,7 +172,38 @@ function ProfileEditor() {
           placeholder="atau tempel URL gambar logo (https://...)"
         />
       </div>
-      <Field label="Link Foto Profil (URL gambar)"><Input value={p.foto_url} onChange={(e) => setP({ ...p, foto_url: e.target.value })} placeholder="https://..." /></Field>
+      <div className="space-y-2">
+        <Label>Foto Profil</Label>
+        <div className="flex items-center gap-4">
+          {p.foto_url ? (
+            <img src={p.foto_url} alt="Foto profil" className="h-14 w-14 rounded-full border object-cover" />
+          ) : (
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border bg-muted text-xs text-muted-foreground">Belum ada</div>
+          )}
+          <div className="flex flex-col gap-2">
+            <label className="inline-flex cursor-pointer items-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+              {photoBusy ? "Memproses..." : "Unggah Foto"}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) onPhotoFile(f); e.target.value = ""; }}
+              />
+            </label>
+            {p.foto_url && (
+              <button type="button" className="text-xs text-muted-foreground underline hover:text-foreground" onClick={() => setP({ ...p, foto_url: "" })}>
+                Hapus foto
+              </button>
+            )}
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground">PNG/JPG, maksimal 500 KB. Foto tampil di halaman Profil Saya.</p>
+        <Input
+          value={p.foto_url.startsWith("data:") ? "" : p.foto_url}
+          onChange={(e) => setP({ ...p, foto_url: e.target.value })}
+          placeholder="atau tempel URL gambar (https://...)"
+        />
+      </div>
       <Field label="Email Kontak"><Input type="email" value={p.email} onChange={(e) => setP({ ...p, email: e.target.value })} /></Field>
       <Button onClick={save}>Simpan Profil</Button>
     </Card>
