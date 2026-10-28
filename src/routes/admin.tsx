@@ -31,7 +31,7 @@ export const Route = createFileRoute("/admin")({
 
 type App = { id?: string; nama: string; kategori: string; deskripsi: string; status: string; url: string; is_featured: boolean; urutan: number };
 type Download = { id?: string; judul: string; jenis: string; deskripsi: string; url: string; urutan: number };
-type Profile = { nama: string; peran: string; tentang: string; foto_url: string; email: string };
+type Profile = { nama: string; peran: string; tentang: string; foto_url: string; logo_url: string; email: string };
 type Message = { id: string; nama: string; email: string; pesan: string; created_at: string };
 
 function AdminPage() {
@@ -105,12 +105,22 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function ProfileEditor() {
   const [p, setP] = useState<Profile | null>(null);
+  const [logoBusy, setLogoBusy] = useState(false);
   useEffect(() => {
     supabase.from("profile").select("*").eq("id", 1).maybeSingle().then(({ data }) =>
-      setP(data ?? { nama: "", peran: "", tentang: "", foto_url: "", email: "" }),
+      setP(data ?? { nama: "", peran: "", tentang: "", foto_url: "", logo_url: "", email: "" }),
     );
   }, []);
   if (!p) return null;
+  function onLogoFile(file: File) {
+    if (!file.type.startsWith("image/")) { toast.error("Berkas harus berupa gambar (PNG/JPG/SVG)"); return; }
+    if (file.size > 200 * 1024) { toast.error("Ukuran logo maksimal 200 KB"); return; }
+    setLogoBusy(true);
+    const reader = new FileReader();
+    reader.onload = () => { setP({ ...p!, logo_url: String(reader.result) }); setLogoBusy(false); };
+    reader.onerror = () => { toast.error("Gagal membaca berkas"); setLogoBusy(false); };
+    reader.readAsDataURL(file);
+  }
   async function save() {
     const { error } = await supabase.from("profile").upsert({ id: 1, ...p!, updated_at: new Date().toISOString() });
     error ? toast.error(error.message) : toast.success("Profil disimpan");
@@ -120,6 +130,38 @@ function ProfileEditor() {
       <Field label="Nama"><Input value={p.nama} onChange={(e) => setP({ ...p, nama: e.target.value })} /></Field>
       <Field label="Peran / Profesi"><Input value={p.peran} onChange={(e) => setP({ ...p, peran: e.target.value })} /></Field>
       <Field label="Tentang Saya"><Textarea rows={5} value={p.tentang} onChange={(e) => setP({ ...p, tentang: e.target.value })} /></Field>
+      <div className="space-y-2">
+        <Label>Logo Beranda</Label>
+        <div className="flex items-center gap-4">
+          {p.logo_url ? (
+            <img src={p.logo_url} alt="Logo" className="h-14 w-14 rounded-lg border object-cover" />
+          ) : (
+            <div className="flex h-14 w-14 items-center justify-center rounded-lg border bg-muted text-xs text-muted-foreground">Belum ada</div>
+          )}
+          <div className="flex flex-col gap-2">
+            <label className="inline-flex cursor-pointer items-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+              {logoBusy ? "Memproses..." : "Unggah Logo"}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) onLogoFile(f); e.target.value = ""; }}
+              />
+            </label>
+            {p.logo_url && (
+              <button type="button" className="text-xs text-muted-foreground underline hover:text-foreground" onClick={() => setP({ ...p, logo_url: "" })}>
+                Hapus logo
+              </button>
+            )}
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground">PNG/JPG/SVG, maksimal 200 KB. Logo tampil di pojok kiri atas halaman beranda.</p>
+        <Input
+          value={p.logo_url.startsWith("data:") ? "" : p.logo_url}
+          onChange={(e) => setP({ ...p, logo_url: e.target.value })}
+          placeholder="atau tempel URL gambar logo (https://...)"
+        />
+      </div>
       <Field label="Link Foto Profil (URL gambar)"><Input value={p.foto_url} onChange={(e) => setP({ ...p, foto_url: e.target.value })} placeholder="https://..." /></Field>
       <Field label="Email Kontak"><Input type="email" value={p.email} onChange={(e) => setP({ ...p, email: e.target.value })} /></Field>
       <Button onClick={save}>Simpan Profil</Button>
